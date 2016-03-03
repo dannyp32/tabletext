@@ -24,6 +24,10 @@
     background: #3D4A6B;
 }
 
+.darker {
+    background: #2a3138;
+}
+
 .clear {
     clear: both;
 }
@@ -58,23 +62,57 @@ html,
 .waitlist {
     width: 30%;
     height: 100%;
-    overflow: scroll;
-    visibility: hidden;
 }
 
 .categories {
     height: 100px;
-    visibility: visible;
 }
+
+.category {
+    width: calc(50% - 15px);
+    height: 80px;
+    float: left;
+    background: #35424e;
+    color: #fff;
+    padding: 15px 0 0 15px;
+    border-right: #41505e;
+}
+
+.category.active {
+    background: #2f3943;
+}
+
+.category > .top-word {
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.category > .bottom-word {
+    font-weight: 400;
+    font-size: 14px;
+    color: #539bf5;
+}
+
+
+/****** ADD PARTY BUTTON ******/
 
 .add-party {
-    visibility: visible;
+    display: block;
+    position: relative;
+    margin: 15px auto;
+    width: 70%;
+    background: #28dfc7;
+    outline: none;
+    height: 40px;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
 }
 
-.scrollable {
-    padding-top: 50px;
-    visibility: visible;
-}
+
+
+/****** PARTIES ******/
 
 .party {
     position: relative;
@@ -82,7 +120,7 @@ html,
     width: 70%;
     height: 80px;
     padding: 15px;
-    background: #fff;
+    background: #35424e;
     line-height: 28px;
     border-radius: 4px;
     position: relative;
@@ -95,19 +133,19 @@ html,
 .party > .name {
     font-size: 24px;
     font-weight: 300;
-    color: #545860;
+    color: #fff;
 }
 
 .party > .preview {
     font-size: 16px;
     font-weight: 400;
-    color: #929CB5;
+    color: #9db0c1;
 }
 
 .party > .arrival-time {
     font-size: 13px;
     font-weight: 900;
-    color: #90A5DC;
+    color: #768fa8;
     position: absolute;
     right: 15px;
     bottom: 4px;
@@ -122,7 +160,7 @@ html,
 .party > .size > .icon {
     border-radius: 20px;
     //border: 20px solid #8DA3DC;
-    background: #8DA3DC;
+    background: #539bf5;
     width: 40px;
     height: 26px;
     color: #fff;
@@ -132,7 +170,7 @@ html,
 
 .party > .size > .number {
     border-radius: 20px;
-    border: 3px solid #8DA3DC;
+    border: 3px solid #539bf5;
     background: #fff;
     width: 36px;
     height: 36px;
