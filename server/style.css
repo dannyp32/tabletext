@@ -1,0 +1,161 @@
+* {
+  font-family: 'Lato', sans-serif;
+}
+
+.clear {
+  clear:both;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waiting-list {
+  background: linear-gradient(to bottom, rgba(243, 245, 249, 1), rgba(208, 223, 258, 1));
+  width: 420px;
+  height: 500px;
+}
+
+
+.party {
+  width: 320px;
+  height: 80px;
+  padding: 15px;
+  background: #fff;
+  line-height: 28px;
+  border-radius: 4px;
+  position: relative;
+  margin: 15px;
+}
+
+.party.active {
+  box-shadow: 0 4px 16px 0px rgba(0, 0, 0, .2);
+}
+
+.party > .name {
+  font-size: 24px;
+  font-weight: 300;
+  color: #545860;
+}
+
+.party >  .preview {
+  font-size: 16px;
+  font-weight: 400;
+  color: #929CB5;
+}
+
+.party > .arrival-time {
+  font-size: 13px;
+  font-weight: 900;
+  color: #90A5DC;
+  position: absolute;
+  right: 15px;
+  bottom: 4px;
+}
+
+.party > .size {
+  position: absolute;
+  right: -38px;
+  top: 15px;
+}
+
+.party > .size > .icon {
+  
+  border-radius: 20px;
+  //border: 20px solid #8DA3DC;
+  background: #8DA3DC;
+  width: 40px;
+  height: 26px;
+  color: #fff;
+  line-height: 26px;
+  padding-left: 15px;
+}
+
+.party > .size > .number {
+  border-radius: 20px;
+  border: 3px solid #8DA3DC;
+  background: #fff;
+  width: 36px;
+  height: 36px;
+  color: #545860;
+  font-weight: 700;
+  text-align: center;
+  line-height: 36px;
+  float: right;
+  margin-top: -5px;
+  margin-left: -15px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, .2);
+}
+
+
+
+
+
+
+
+.message {
+  position: relative;
+  width: 240px;
+}
+
+.message > .time {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7d8ea0;
+  padding-bottom: 8px;
+}
+
+.message > .text {
+  font-size: 15px;
+  font-weight: 500;
+  padding: 20px;
+  border-radius: 8px 8px 8px 2px;
+  line-height: 22px;
+  box-shadow: 0 2px 8px 0px rgba(0, 0, 0, .2);
+}
+
+.message.me > .text {
+    background: #fff;
+    color: #636D89;
+    border-radius: 8px 8px 8px 2px;
+}
+
+.message.them > .text {
+    background: #539BF5;
+    color: #fff;
+    border-radius: 8px 8px 2px 8px;
+}
+
+.message > .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  display: block;
+  background: black;
+  position: absolute;
+  bottom: 0;
+}
+
+.message.me > .dot {
+  left: -20px;
+  background: #fff;
+}
+
+.message.them > .dot {
+  right: -20px;
+  background: #539BF5;
+}
+
+
+
+
+
+
+.conversation > .message{
+  
+  margin-left: 100px;
+}
