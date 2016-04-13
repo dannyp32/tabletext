@@ -1,0 +1,35 @@
+body {
+    background: #f1f6fb;
+    font-family: 'Lato', sans-serif;
+}
+
+.sidebar {
+    width: 36px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #fff;
+    box-shadow: 0 0 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+.signin > input, .signin > button {
+    display: block;
+    margin: 0 auto;
+}
+
+.signin > .header {
+    padding: 15px;
+    color: #4E576D;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+}
+
+.signin > .header > .name {
+    font-weight: 300;
+    font-size: 32px;
+}
+
+
+

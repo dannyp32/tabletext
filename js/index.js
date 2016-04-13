@@ -1,5 +1,7 @@
 $('.add-party').click(function (event) {
-    $('.add-party-form').show();
+    $('.add-party-form2').show(function(){
+          $(".add-party-form2").slideDown();
+      });
 });
 $('.add-party-submit').click(function (event) {
     $('.add-party-submit').attr("disabled", true);
