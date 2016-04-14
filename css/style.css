@@ -118,7 +118,7 @@ html,
 }
 
 .add-party-form2 > .title {
-    color: #539bf5;    
+    color: #539bf5;
     font-weight: 100;
     font-size: 28px;
     text-align: center;
@@ -140,11 +140,16 @@ html,
     border: none;
 }
 
+.add-party:disabled {
+    opacity: .3;
+}
 
 
 /****** PARTIES ******/
 
-.party > .info > .info-group, .info-group > .icon, .info-group > .description  {
+.party > .info > .info-group,
+.info-group > .icon,
+.info-group > .description {
     display: inline-block;
 }
 
