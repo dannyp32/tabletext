@@ -14,26 +14,55 @@ $('send-message').click(function (event) {
 
 
 
-var Chat = {
+var Chat = (function () {
+    var c = {},
+        self = c;
 
-    settings: {
-        articleList: $("#article-list"),
-        moreButton: $("#more-button")
-    },
+    c.chat = $('.chat');
+    c.party = {};
 
-    init: function () {
-        s = this.settings;
+    c.init = function () {
         this.bindUIActions();
-    },
+        console.log('it gets to init in CHAT');
+    };
 
-    bindUIActions: function () {
-        s.moreButton.on("click", function () {
-            NewsWidget.getMoreArticles(s.numArticles);
+    c.bindUIActions = function () {
+        self.chat.on('chat:reload', self.loadChat);
+    };
+
+    c.loadChat = function (event, party) {
+        if (party) {
+            self.loadMessages(party.conversation_id);
+        }
+        console.log(party);
+        //console.log(party.conversation_id);
+        //self.loadMessages(party.conversation_id);
+    };
+
+    c.loadMessages = function (conversationId) {
+        $.get('http://localhost:3000/conversation/' + conversationId + '/messages', function (data) {
+            console.log('Here are the messages!!');
+            console.log(data);
+            loadMessagesUI(data);
+        }).fail(function () {
+            alert('loadMessages get request failed :(');
+
         });
-    },
+    };
 
-    getMoreArticles: function (numToGet) {
-        // $.ajax or something
-        // using numToGet as param
+    // Private Methods
+    var loadMessagesUI = function (messages) {
+        for (var i = 0; i < messages.length; i++) {
+            $('.conversation').append('<div class="message them"><div class="time">' + stringifyDate(new Date(messages[i].created_at)) + '</div><div class="text">' + messages[i].message + '</div><div class="dot"></div></div>');
+        }
+    };
+
+
+
+    // Helpers
+    var stringifyDate = function (date) {
+        return ((date.getHours() + 11) % 12 + 1) + ":" + date.getMinutes();
     }
-};
+
+    return c;
+}());

@@ -20,28 +20,21 @@ module.exports = {
    },
 
    createParty: function (req, res, io, twilio) {
-      console.log('got the add party POST');
       var name = req.body.name;
       var size = req.body.size;
       var mobile_number = req.body.mobile; 
-      var newConvo = new Conversation();
+      var conversation = new Conversation();
 
-   console.log(twilio);
-      console.log(req.body);
-
-console.log(newConvo);
-
-      newConvo.save(function (err) {
+      conversation.save(function (err) {
          if (err) {
             console.log(err);
             res.send({ error:'Could not save new conversation.' });
          } else {
-            console.log('Conversation saved!');
             var newParty = new Party({ 
                name: name,
                size: size,
                mobile_number: mobile_number,
-               conversation_id: newConvo.id 
+               conversation_id: conversation.id 
             });
 
             newParty.save(function (err) {
@@ -49,13 +42,12 @@ console.log(newConvo);
                   console.log(err);
                   res.send({ error:'Could not save new party.' });
                } else {
-                  console.log('Party saved!');
                   var messageContent = "Hi " + name + " welcome to our restaurant!";
 
                   var message = new Message({
                      message: messageContent,
                      state: 0,
-                     conversation_id: newConvo.id,
+                     conversation_id: conversation.id,
                   });
 
                   message.save(function (err) {
@@ -63,14 +55,11 @@ console.log(newConvo);
                         console.log(err);
                         res.send({ error:'Could not save new message.' });
                      } else {
-                        console.log('Message saved!');
                         io.emit('newParty', { 
                            party:newParty,
                            message:message
                         });
 
-                        console.log(newParty);
-                        console.log(message);
                         twilio.sms.messages.create({
                            body: messageContent,
                            to: mobile_number,

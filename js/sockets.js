@@ -9,6 +9,8 @@ socket.on('newParty', function (data) {
     var message = data.message;
 
     $('#parties').prepend('<div class=' + '"party"' + '><div class=' + '"name"' + '>' + party.name + '</div><div class=' + '"preview truncate"' + '>' + message.message + '</div><div class="arrival-time">' + stringifyDate(new Date(party.arrival_time)) + '</div><div class="size"><i class="fa fa-users icon"></i><div class="number">' + party.size + '</div><div class="clear"></div></div></div>');
+
+    //Waitlist.bindUIActions();
 });
 
 socket.on('newMessage', function (data) {

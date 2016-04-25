@@ -2,10 +2,10 @@ var Waitlist = (function () {
     var w = {},
         self = w;
 
-
     w.addPartyForm = $('.add-party-form');
     w.addPartyButton = $('.add-party');
     w.partyItems = $('.party');
+    w.partiesParent = $('#parties');
     w.chat = $('.chat');
     w.parties = [];
 
@@ -20,7 +20,7 @@ var Waitlist = (function () {
 
     w.bindUIActions = function () {
         self.addPartyButton.on('click', self.clickAddParty);
-        self.partyItems.on('click', self.selectParty);
+        self.partiesParent.on('click', '.party', self.selectParty);
     };
 
     w.clickAddParty = function () {
@@ -34,16 +34,21 @@ var Waitlist = (function () {
     w.selectParty = function () {
         var selectedParty = $(this);
         var oldParty = self.partyItems.index(self.activeParty);
-        var index = self.partyItems.index(this);
+        var index = $(this).index();
 
         if (oldParty >= 0) {
             self.partyItems[oldParty].removeClass('active');
         }
 
+        if (index != self.parties.length) {
+            w.chat.trigger("chat:reload", [self.parties[index]]);
+        }
+
         console.log(index);
-        self.activeParty = self.parties[index];
-        selectedParty.addClass('active');
-        self.chat.trigger("chat:load", self.parties[index]);
+
+        //self.activeParty = self.parties[index];
+        //selectedParty.addClass('active');
+        //self.chat.trigger("chat:load", self.parties[index]);
     };
 
     // Private Methods
@@ -58,17 +63,24 @@ var Waitlist = (function () {
     var submitAddPartyForm = function () {
         self.addPartyButton.attr('disabled', true);
 
-        dummyPost('http://localhost:3000/addParty', {
+        $.post('http://localhost:3000/newParty', {
             name: self.addPartyForm.find('.name').val(),
             size: self.addPartyForm.find('.size').val(),
             mobile: self.addPartyForm.find('.mobile').val()
         }, function (data) {
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+
             self.parties.splice(0, 0, data.party);
 
             self.addPartyForm.hide();
             self.addPartyButton.attr('disabled', false);
             self.addPartyButton.removeClass('submit');
             self.addPartyButton.text('Add Party');
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Error, status = " + textStatus + ", " + "error thrown: " + errorThrown);
         });
     };
 
