@@ -25,34 +25,25 @@ var Waitlist = (function () {
 
     w.clickAddParty = function () {
         if (self.addPartyButton.hasClass('submit')) {
-            submitAddPartyForm();
+            _submitAddPartyForm();
         } else {
-            showAddPartyForm();
+            _showAddPartyForm();
         }
     };
 
     w.selectParty = function () {
         var selectedParty = $(this);
-        var oldParty = self.partyItems.index(self.activeParty);
         var index = $(this).index();
-
-        if (oldParty >= 0) {
-            self.partyItems[oldParty].removeClass('active');
-        }
 
         if (index != self.parties.length) {
             w.chat.trigger("chat:reload", [self.parties[index]]);
         }
 
         console.log(index);
-
-        //self.activeParty = self.parties[index];
-        //selectedParty.addClass('active');
-        //self.chat.trigger("chat:load", self.parties[index]);
     };
 
     // Private Methods
-    var showAddPartyForm = function () {
+    var _showAddPartyForm = function () {
         self.addPartyForm.show(function () {
             self.addPartyButton.text('Done!');
             self.addPartyButton.addClass('submit');
@@ -60,7 +51,7 @@ var Waitlist = (function () {
         });
     };
 
-    var submitAddPartyForm = function () {
+    var _submitAddPartyForm = function () {
         self.addPartyButton.attr('disabled', true);
 
         $.post('http://localhost:3000/newParty', {

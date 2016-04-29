@@ -1,4 +1,5 @@
 var Message = require('../models/Message');
+var mongoose = require('mongoose');
 
 module.exports = {
    getMessages: function (req, res) {
@@ -12,12 +13,12 @@ module.exports = {
 
    createMessage: function (req, res, io, twilio) {
       var conversation_id = req.body.conversation_id;
-      var content = req.body.message;
+      var text = req.body.message;
       var mobile_number = req.body.mobile;
 
       var message = new Message({
-         text:content,
-         conversation_id:new ObjectId(conversation_id)
+         message: text,
+         conversation_id: mongoose.Types.ObjectId(conversation_id)
       });
 
       message.save(function (err) {
@@ -25,12 +26,12 @@ module.exports = {
             console.log(err);
             res.send({ error:'Could not save new message.' });
          } else {
-            io.emit('newMessage', {
+           /* io.emit('newMessage', {
                message:message
             });
-
+         */
             twilio.sms.messages.create({
-               body: message.text,
+               body: message.message,
                to: mobile_number,
                from: '+18052629242', // my twilio account number
             }, function(err, sms) {
