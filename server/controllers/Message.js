@@ -26,18 +26,18 @@ module.exports = {
             console.log(err);
             res.send({ error:'Could not save new message.' });
          } else {
-           /* io.emit('newMessage', {
-               message:message
-            });
-         */
             twilio.sms.messages.create({
                body: message.message,
                to: mobile_number,
                from: '+18052629242', // my twilio account number
             }, function(err, sms) {
-               process.stdout.write(sms.sid);
+               if (err) {
+                  console.log(err);
+               } else if (sms && sms.sid) {
+                  process.stdout.write(sms.sid);
+               }
             });
-            
+
             res.send({ 
                message:message
             });

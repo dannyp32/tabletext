@@ -1,28 +1,17 @@
-//$('send-message').click(function (event) {
-//    $('.send-message').attr("disabled", true);
-//
-//    $.post("http://localhost:3000/newMessage", {
-//        name: $('.new-message > .message-text').val(),
-//        conversationId: conversationId
-//    }, function (data) {
-//        console.log(data);
-//        // when ajax call is done 
-//        $('.add-party-form').hide();
-//        $('.send-message').attr("disabled", false);
-//    });
-//});
-
-
-
 var Chat = (function () {
     var c = {},
         self = c;
 
     c.chat = $('.chat');
+    c.chatName = $('.chat > .description > .name');
     c.conversation = $('.conversation');
     c.sendMessageButton = $('.send-message');
     c.newMessageText = $('.message-text');
     c.party = {};
+
+    c.statPartySize = $('.stat.party-size');
+    c.statWaitingFor = $('.stat.waiting-for');
+    c.statTotalWait = $('.stat.total-wait');
 
     c.init = function () {
         this.bindUIActions();
@@ -56,11 +45,40 @@ var Chat = (function () {
     c.loadChat = function (event, party) {
         if (party) {
             self.loadMessages(party.conversation_id);
+            self.chatName.text(party.name);
+            self.loadStats(party);
         }
         console.log(party);
         self.party = party;
         //console.log(party.conversation_id);
         //self.loadMessages(party.conversation_id);
+    };
+
+    c.loadStats = function (party) {
+        if (party) {
+            c.statPartySize.find('.amount').text(party.size);
+            c._setTimeWaitedThusFar(party);
+            c.statTotalWait.find('.amount').text('45');
+            c.statTotalWait.find('.type').text('minutes');
+        }
+    };
+
+    c._setTimeWaitedThusFar = function (party) {
+        if (party && party.arrival_time) {
+            var today = new Date();
+            var diffMs = (today - new Date(party.arrival_time));
+            var diffHrs = Math.round((diffMs % 86400000) / 3600000); // hours
+            var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+            c.statWaitingFor.find('.description').text(party.name + ' has been waiting for');
+            if (diffHrs > 0) {
+                c.statWaitingFor.find('.amount').text(diffHrs + ':' + diffMins);
+                c.statWaitingFor.find('.type').text('');
+            } else if (diffMins > 0) {
+                c.statWaitingFor.find('.amount').text(diffMins);
+                c.statWaitingFor.find('.type').text('minutes');
+            }
+        }
     };
 
     c.loadMessages = function (conversationId) {
@@ -75,6 +93,7 @@ var Chat = (function () {
 
     // Private Methods
     var _loadMessagesUI = function (messages) {
+        self.conversation.html('');
         for (var i = 0; i < messages.length; i++) {
             _addMessage(messages[i]);
         }
