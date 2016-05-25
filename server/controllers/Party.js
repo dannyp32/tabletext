@@ -65,6 +65,11 @@ module.exports = {
                            to: mobile_number,
                            from: '+18052629242', // my twilio account number
                         }, function(err, sms) {
+                           if (err) {
+                              console.log(err);
+                              res.send({ error:'Could not send new message with twilio.' });
+                              return;
+                           }
                            process.stdout.write(sms.sid);
                         });
                         

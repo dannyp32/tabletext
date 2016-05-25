@@ -42,7 +42,31 @@ var Waitlist = (function () {
         console.log(index);
     };
 
+    w.loadParties = function (userId) {
+        $.get('http://localhost:3000/userId/' + userId + '/parties', function (data) {
+            console.log('Here are the parties!!');
+            console.log(data);
+            _loadPartiesUI(data);
+        }).fail(function () {
+            console.log('loadMessages get request failed :(');
+        });
+    };
+
     // Private Methods
+    var _loadParitesUI(parties) = function () {
+        self.partiesParent.html('');
+        for (var i = 0; i < parties.length; i++) {
+            _addParty(parties[i]);
+        }
+    };
+
+    var _addParty = function () {
+        var party = data.party;
+        var message = data.party.message;
+
+        $('#parties').prepend('<div class=' + '"party"' + '><div class=' + '"name"' + '>' + party.name + '</div><div class=' + '"preview truncate"' + '>' + message.message + '</div><div class="arrival-time">' + _stringifyDate(new Date(party.arrival_time)) + '</div><div class="size"><i class="fa fa-users icon"></i><div class="number">' + party.size + '</div><div class="clear"></div></div></div>');
+    }
+
     var _showAddPartyForm = function () {
         self.addPartyForm.show(function () {
             self.addPartyButton.text('Done!');
@@ -75,6 +99,12 @@ var Waitlist = (function () {
         });
     };
 
+    var _stringifyDate = function (date) {
+        var minuteFiller = date.getMinutes() < 10 ? '0' : '';
+        var minutes = minuteFiller + date.getMinutes();
+        return ((date.getHours() + 11) % 12 + 1) + ':' + minutes;
+    }
+
     var dummyPost = function (postToString, data, callback) {
         console.log('POST: ' + postToString);
         console.log(data);
@@ -83,6 +113,8 @@ var Waitlist = (function () {
             callback();
         }
     };
+
+
 
     return w;
 }());

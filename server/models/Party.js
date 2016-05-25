@@ -10,4 +10,4 @@ var schema = new Schema({
    conversation_id: { type:Schema.ObjectId}
 });
 
-module.exports = mongoose.model('Party', schema);
+module.exports = mongoose.model('Party', schema, 'Party');

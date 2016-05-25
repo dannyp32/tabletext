@@ -57,7 +57,7 @@ var Chat = (function () {
     c.loadStats = function (party) {
         if (party) {
             c.statPartySize.find('.amount').text(party.size);
-            c._setTimeWaitedThusFar(party);
+            setTimeout(60000, c._setTimeWaitedThusFar(party));
             c.statTotalWait.find('.amount').text('45');
             c.statTotalWait.find('.type').text('minutes');
         }
@@ -101,7 +101,8 @@ var Chat = (function () {
 
     var _addMessage = function (message) {
         if (message && message.message && message.created_at) {
-            self.conversation.append('<div class="message them"><div class="time">' + _stringifyDate(new Date(message.created_at)) + '</div><div class="text">' + message.message + '</div><div class="dot"></div></div>');
+            var messageHtml = '<div class="message ' + (message.is_incoming ? 'me' : 'them') + '"><div class="time">' + _stringifyDate(new Date(message.created_at)) + '</div><div class="text">' + message.message + '</div><div class="dot"></div></div>';
+            self.conversation.append(messageHtml);
         } else {
             console.log('There was an error adding the new message.');
         }
@@ -109,7 +110,9 @@ var Chat = (function () {
 
     // Helpers
     var _stringifyDate = function (date) {
-        return ((date.getHours() + 11) % 12 + 1) + ":" + date.getMinutes();
+        var minuteFiller = date.getMinutes() < 10 ? '0' : '';
+        var minutes = minuteFiller + date.getMinutes();
+        return ((date.getHours() + 11) % 12 + 1) + ':' + minutes;
     }
 
     return c;

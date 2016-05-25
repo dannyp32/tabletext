@@ -6,4 +6,4 @@ var schema = new Schema({
    updated_at: { type:Date, default:Date.now },
 });
 
-module.exports = mongoose.model('Conversation', schema);
+module.exports = mongoose.model('Conversation', schema, 'Conversation')

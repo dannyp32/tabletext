@@ -3,9 +3,10 @@ var mongoose = require('mongoose'),
 
 var schema = new Schema({
    message: { type:String },
+   is_incoming: { type:Boolean },
    state: { type:Number, default:0 }, // Unread = 0, Read = 1;
    created_at: { type:Date, default:Date.now },
    conversation_id: { type:Schema.ObjectId },
 });
 
-module.exports = mongoose.model('Message', schema);
+module.exports = mongoose.model('Message', schema, 'Message');
