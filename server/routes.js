@@ -1,5 +1,6 @@
 var Party = require('./controllers/Party');
 var Message = require('./controllers/Message');
+var Setting = require('./controllers/Setting');
 
 var routes = function (app, io, twilio) {
    // GET requests
@@ -15,6 +16,8 @@ var routes = function (app, io, twilio) {
    // POST requests
    app.post('/newParty', function (req, res) { Party.createParty(req, res, io, twilio); });
    app.post('/newMessage', function (req, res) { Message.createMessage(req, res, twilio, false); });
+   app.post('/saveSettings', Setting.saveSettings);
+   app.get('/settings', Setting.getSettings);
 
 
    // Twilio requests

@@ -2,10 +2,6 @@ var Party = require('../models/Party');
 var Conversation = require('../models/Conversation');
 var Message = require('../models/Message');
 
-var getParties = function (status, date) {
- 
-};
-
 module.exports = {
    getMessages: function (req, res) {
       console.log('conversation id is: ' + req.params.conversation_id);
