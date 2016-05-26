@@ -12,6 +12,7 @@ var Chat = (function () {
     c.statPartySize = $('.stat.party-size');
     c.statWaitingFor = $('.stat.waiting-for');
     c.statTotalWait = $('.stat.total-wait');
+    c.statNotes = $('.stat.notes');
 
     c.init = function () {
         this.bindUIActions();
@@ -60,6 +61,7 @@ var Chat = (function () {
             setTimeout(60000, c._setTimeWaitedThusFar(party));
             c.statTotalWait.find('.amount').text('45');
             c.statTotalWait.find('.type').text('minutes');
+            c.statNotes.find('.content').text((party.notes ? party.notes : ''));
         }
     };
 
@@ -103,6 +105,7 @@ var Chat = (function () {
         if (message && message.message && message.created_at) {
             var messageHtml = '<div class="message ' + (message.is_incoming ? 'me' : 'them') + '"><div class="time">' + _stringifyDate(new Date(message.created_at)) + '</div><div class="text">' + message.message + '</div><div class="dot"></div></div>';
             self.conversation.append(messageHtml);
+            $(".conversation").scrollTop($(".conversation")[0].scrollHeight);
         } else {
             console.log('There was an error adding the new message.');
         }

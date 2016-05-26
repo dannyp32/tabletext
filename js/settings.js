@@ -44,6 +44,9 @@ var Settings = (function () {
             if (data && data[0]) {
                 self.hoursMessage.text(data[0].hours);
                 self.addressMessage.val(data[0].address);
+                self.menuMessage.val(data[0].menu);
+                self.websiteMessage.val(data[0].website);
+                self.takeoutMessage.val(data[0].takeout);
             }
         }).fail(function () {
             console.log('loadMessages get request failed :(');

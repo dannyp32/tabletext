@@ -1,6 +1,146 @@
 var Message = require('../models/Message');
 var Party = require('../models/Party');
+var Setting = require('../models/Setting');
 var mongoose = require('mongoose');
+
+var isAskingAboutHours = function (text) {
+   if (text.indexOf("time") > -1 && 
+      (text.indexOf("open") > -1 || 
+      text.indexOf("close") > -1 || 
+      text.indexOf("closing") > -1 || 
+      text.indexOf("opening") > -1)) {
+      return true; 
+   }
+
+   if (text.indexOf("long") > -1 && 
+      (text.indexOf("open") > -1 || text.indexOf("close") > -1)) {
+      return true;   
+   }
+
+   if (text.indexOf("business") > -1 && 
+      text.indexOf("hours") > -1) {
+      return true;   
+   }
+   return false;
+};
+
+
+var isAskingAboutAddress = function (text) {
+   if ((text.indexOf("where") > -1 && 
+      text.indexOf("located") > -1) || 
+      text.indexOf("address") > -1 || 
+      text.indexOf("directions") > -1) {
+      return true;   
+   }
+
+   return false;
+};
+
+var isAskingAboutMenu = function (text) {
+   if (text.indexOf("menu") > -1) {
+      return true;   
+   }
+
+   return false;
+};
+
+var isAskingAboutWebsite = function (text) {
+   if (text.indexOf("website") > -1 || 
+      text.indexOf("site") > -1) {
+      return true;   
+   }
+
+   return false;
+};
+
+var isAskingAboutTakeout = function (text) {
+   if (text.indexOf("takeout") > -1 || 
+       text.indexOf("take out") > -1 ||
+       text.indexOf("carryout") > -1 ||
+       text.indexOf("carry out") > -1 ||
+       text.indexOf("pickup") > -1 ||
+       text.indexOf("pick up") > -1) {
+      return true;   
+   }
+   return false;
+};
+
+var parseMessage = function (message, conversation_id, user_id, toNumber, io, twilio) {
+   var text = message.message.toLowerCase();
+   var getHoursMessage = false;
+   var getAddressMessage = false;
+   var getMenuMessage = false;
+   var getWebsiteMessage = false;
+   var getTakeoutMessage = false;
+   var automatedResponse = '';
+
+   if ((getHoursMessage = isAskingAboutHours(text)) || 
+      (getAddressMessage = isAskingAboutAddress(text)) ||
+      (getMenuMessage = isAskingAboutMenu(text)) ||
+      (getWebsiteMessage = isAskingAboutWebsite(text)) ||
+      (getTakeoutMessage = isAskingAboutTakeout(text))) {
+
+      Setting.find({ user_id: user_id}, function (err, settings) {
+         if (err || !settings || !settings[0]) {
+            console.log(err);
+            return;
+         }
+
+         console.log("here are your settings");
+         console.log(settings);
+         console.log(JSON.stringify(settings));
+
+         if (getHoursMessage) {
+            console.log('its trying to get the hours message');
+            automatedResponse = settings[0].hours;
+         } else if (getAddressMessage) {
+            console.log('its trying to get the address message');
+            automatedResponse = settings[0].address;
+         } else if (getMenuMessage) {
+            console.log('its trying to get the menu message');
+            automatedResponse = settings[0].menu;
+         } else if (getWebsiteMessage) {
+            console.log('its trying to get the website message');
+            automatedResponse = settings[0].website;
+         } else if (getTakeoutMessage) {
+            console.log('its trying to get the takeout message');
+            automatedResponse = settings[0].takeout;
+         } else {
+            return;
+         }
+
+
+         console.log(automatedResponse);
+
+         var message = new Message({
+            message: automatedResponse,
+            is_incoming: false,
+            conversation_id: mongoose.Types.ObjectId(conversation_id)
+         });
+
+         message.save(function (err) {
+            if (err) {
+               console.log(err);
+            } else {
+
+               console.log(automatedResponse);
+            twilio.sms.messages.create({
+               body: automatedResponse,
+               to: toNumber,
+               from: '+18052629242', // my twilio account number
+            }, function(err, sms) {
+               if (err) {
+                  console.log(err);
+                  return;
+               }
+               io.emit('incomingMessage', { message:message });
+               process.stdout.write(sms.sid);
+             });
+            }
+         });
+      });
+   }
+};
 
 module.exports = {
    getMessages: function (req, res) {
@@ -47,29 +187,18 @@ module.exports = {
       });
    },
 
-   incomingMessageOld: function (req, res, io, twilio) {
-      console.log('is twilio even working?');
-      io.emit('getActiveConversation', { reqBody: req.body });
-   },
-
    incomingMessage: function (req, res, io, twilio) {
-      console.log('is twilio even working?');
       var mobile = req.body.From.substr(2).toString();
       var text = req.body.Body;
       console.log(mobile);
 
       Party.findOne({mobile_number: mobile}).sort({ 'arrival_time':-1 }).exec(function (err, data) {
          if (err) {
-            console.log('some error at find');
             console.log(err);
             return;
          }
 
-         //console.log(typeof data);
-         //console.log(JSON.stringify(data));
          if (data) {
-            console.log(data);
-//            io.emit('newInboundMessage', { text: text,  
             var message = new Message({
                message: text,
                is_incoming: true,
@@ -78,70 +207,14 @@ module.exports = {
 
             message.save(function (err) {
                if (err) {
-                  console.log('some error at save');
                   console.log(err);
                } else {
-                  console.log('it gets here');
                   io.emit('incomingMessage', { message:message });
+                  parseMessage(message, data.conversation_id, '', req.body.From, io, twilio);
                }
             });
 
          }
       });
-   },
-
-
-
-
-   saveIncomingMessage: function (reqBody, conversation_id, io) {
-      var conversation_id = conversation_id;
-      var text = reqBody.Body;
-      var mobile = reqBody.From.substr(1).toString();
-      console.log(reqBody);
-      console.log(conversation_id);
-      console.log(reqBody.From);
-      console.log(reqBody.From.substr(1));
-  Party.find({mobile_number: mobile})
-       .exec(function (err, data) {
-          if (err) {
-             console.log('some error at find');
-             console.log(err);
-             return;
-          }
-          console.log(data);
-if (data && data[0]) {
-console.log(data[0]);
-         console.log(data);
-}
-     
-       });
-/*
-      Party.find({ mobile_number:reqBody.From.substr(1)})
-       .limit(1).sort({ 'arrival_time':-1 }).exec(function (err, data) {
-          if (err) {
-             console.log('some error at find');
-             console.log(err);
-             return;
-          }
-
-         console.log(data);
-         if (data.length == 1) {
-            var message = new Message({
-               message: text,
-               is_incoming: true,
-               conversation_id: mongoose.Types.ObjectId(data[0].conversation_id)
-            });
-
-            message.save(function (err) {
-               if (err) {
-                  console.log('some error at save');
-                  console.log(err);
-               } else {
-                  io.emit('incomingMessage', { message:message });
-               }
-            });
-         }
-      });
-   */
    }
 };

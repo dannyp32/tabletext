@@ -13,19 +13,24 @@
     <div class="container">
         <div class="waitlist left darker">
             <div class="categories">
-                <div class="category active">
+                <a class="category active" href="index.html">
                     <div class="top-word">WAITING</div>
                     <div class="bottom-word">List</div>
-                </div>
-                <div class="category">
+                </a>
+                <a class="category">
                     <div class="top-word">INCOMING</div>
                     <div class="bottom-word">Messages</div>
-                </div>
+                </a>
+                <a class="category" href="settings.html">
+                    <div class="top-word">USER</div>
+                    <div class="bottom-word">Settings</div>
+                </a>
             </div>
             <div class="add-party-form">
                 <input class="name" type="text" placeholder="Name">
                 <input class="size" type="text" placeholder="Size">
                 <input class="mobile" type="text" placeholder="Mobile Number">
+                <textarea class="notes" placeholder="Notes...                    birthday today                  Patio seating"></textarea>
             </div>
             <button class="add-party">Add Party</button>
             <div id="parties">
@@ -59,10 +64,9 @@
                 <div class="amount">0</div>
                 <div class="type">minutes</div>
             </div>
-            <div class="stat total-wait">
-                <div class="description">Quoted time about</div>
-                <div class="amount">45</div>
-                <div class="type">minutes</div>
+            <div class="stat notes">
+                <div class="description">Notes</div>
+                <div class="content"></div>
             </div>
         </div>
         <div class="clear"></div>

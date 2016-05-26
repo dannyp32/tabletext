@@ -48,6 +48,9 @@ var Waitlist = (function () {
             console.log('Here are the parties!!');
             console.log(data);
             _loadPartiesUI(data);
+            if (self.parties && self.parties[0]) {
+                w.chat.trigger("chat:reload", [self.parties[0]]);
+            }
         }).fail(function () {
             console.log('loadMessages get request failed :(');
         });
@@ -83,7 +86,8 @@ var Waitlist = (function () {
         $.post('http://localhost:3000/newParty', {
             name: self.addPartyForm.find('.name').val(),
             size: self.addPartyForm.find('.size').val(),
-            mobile: self.addPartyForm.find('.mobile').val()
+            mobile: self.addPartyForm.find('.mobile').val(),
+            notes: self.addPartyForm.find('.notes').val()
         }, function (data) {
             if (data.error) {
                 console.log(data.error);

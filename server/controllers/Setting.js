@@ -18,7 +18,7 @@ module.exports = {
       var address = req.body.address;
       var menu = req.body.menu; 
       var website = req.body.website;
-      var takeout = ''; 
+      var takeout = req.body.takeout; 
 
       var settings = {
          hours: hours,

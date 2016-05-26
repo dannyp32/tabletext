@@ -69,13 +69,14 @@ html,
 }
 
 .category {
-    width: calc(50% - 15px);
+    width: calc(33% - 15px);
     height: 80px;
     float: left;
     background: #35424e;
     color: #fff;
     padding: 15px 0 0 15px;
     border-right: #41505e;
+    text-decoration: none;
 }
 
 .category.active {
@@ -103,18 +104,27 @@ html,
     display: none;
 }
 
-.add-party-form > input {
+.add-party-form > input,
+.add-party-form > textarea {
     display: block;
     width: 70%;
-    height: 36px;
     margin: 0 auto;
     background: #22282d;
     outline: none;
     margin-top: 15px;
-    padding: 0 15px;
     border: 1px solid #1b2026;
     border-radius: 3px;
     color: #fff;
+}
+
+.add-party-form > input {
+    height: 36px;
+    padding: 0 15px;
+}
+
+.add-party-form > textarea {
+    height: 100px;
+    padding: 15px;
 }
 
 .add-party-form > .title {
@@ -264,9 +274,16 @@ html,
     font-size: 72px;
 }
 
-.stat > .type {
+.stat > .type,
+.stat > .content {
     font-weight: 300;
     font-size: 18px;
+}
+
+.stat > .content {
+    white-space: pre-wrap;
+    text-align: left;
+    padding: 15px 15px 0 20px;
 }
 
 

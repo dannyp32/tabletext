@@ -40,8 +40,14 @@ module.exports = {
    createParty: function (req, res, io, twilio) {
       var name = req.body.name;
       var size = req.body.size;
+      var notes = req.body.notes;
       var mobile_number = req.body.mobile; 
       var conversation = new Conversation();
+
+      console.log('notes is : ');
+
+      console.log(notes);
+
 
       conversation.save(function (err) {
          if (err) {
@@ -51,6 +57,7 @@ module.exports = {
             var newParty = new Party({ 
                name: name,
                size: size,
+               notes: notes,
                mobile_number: mobile_number,
                conversation_id: conversation.id 
             });
