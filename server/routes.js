@@ -6,6 +6,8 @@ var routes = function (app, io, twilio) {
    app.get('/test', function (req, res) {console.log('ngrok went through');});
    app.post('/twilio', function (req, res) {console.log('twilio went through'); console.log(req); res.send();});
    app.get('/conversation/:conversation_id/messages', Message.getMessages);
+   app.get('/userId/:user_id/parties', function (req, res) {
+      console.log('in routes at least'); Party.getParties(req, res);});
 //   app.get('/', function (req, res) { res.sendFile(__dirname + '/views/index.html'); });
 //   app.get('/waitlist', Party.getParties);
 

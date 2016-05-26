@@ -19,6 +19,7 @@ var Waitlist = (function () {
     };
 
     w.bindUIActions = function () {
+        self.loadParties('');
         self.addPartyButton.on('click', self.clickAddParty);
         self.partiesParent.on('click', '.party', self.selectParty);
     };
@@ -43,7 +44,7 @@ var Waitlist = (function () {
     };
 
     w.loadParties = function (userId) {
-        $.get('http://localhost:3000/userId/' + userId + '/parties', function (data) {
+        $.get('http://localhost:3000/userId/' + '2232' + '/parties', function (data) {
             console.log('Here are the parties!!');
             console.log(data);
             _loadPartiesUI(data);
@@ -53,18 +54,19 @@ var Waitlist = (function () {
     };
 
     // Private Methods
-    var _loadParitesUI(parties) = function () {
+    var _loadPartiesUI = function (parties) {
         self.partiesParent.html('');
         for (var i = 0; i < parties.length; i++) {
             _addParty(parties[i]);
         }
     };
 
-    var _addParty = function () {
-        var party = data.party;
-        var message = data.party.message;
+    var _addParty = function (data) {
+        var party = data;
+        self.parties.splice(0, 0, data);
+        //var message = data.party.message;
 
-        $('#parties').prepend('<div class=' + '"party"' + '><div class=' + '"name"' + '>' + party.name + '</div><div class=' + '"preview truncate"' + '>' + message.message + '</div><div class="arrival-time">' + _stringifyDate(new Date(party.arrival_time)) + '</div><div class="size"><i class="fa fa-users icon"></i><div class="number">' + party.size + '</div><div class="clear"></div></div></div>');
+        $('#parties').prepend('<div class=' + '"party"' + '><div class=' + '"name"' + '>' + party.name + '</div><div class=' + '"preview truncate"' + '>' + 'message.message' + '</div><div class="arrival-time">' + _stringifyDate(new Date(party.arrival_time)) + '</div><div class="size"><i class="fa fa-users icon"></i><div class="number">' + party.size + '</div><div class="clear"></div></div></div>');
     }
 
     var _showAddPartyForm = function () {

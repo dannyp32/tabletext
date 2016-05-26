@@ -7,8 +7,30 @@ var getParties = function (status, date) {
 };
 
 module.exports = {
-   getParties: function (req, res) {
+   getMessages: function (req, res) {
+      console.log('conversation id is: ' + req.params.conversation_id);
+      Message.find({ conversation_id : req.params.conversation_id }, 
+         function (err, messages) {
+            console.log(messages);
+            res.send(messages); 
+         });
+   },
 
+
+   getParties: function (req, res) {
+      console.log('it gets here');
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      Party.find({ arrival_time : {$gte: today}}).exec( 
+         function (err, parties) {
+            if (err) {
+               console.log(err);
+               return;
+            }
+            console.log(parties);
+            res.send(parties); 
+         });
    },
 
    getSeatedParties: function (req, res) {
