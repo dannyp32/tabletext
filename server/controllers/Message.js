@@ -1,7 +1,42 @@
 var Message = require('../models/Message');
 var Party = require('../models/Party');
 var Setting = require('../models/Setting');
+var Conversation = require('../models/Conversation');
 var mongoose = require('mongoose');
+
+var createInboundConversation = function (mobile, text, io) {
+   console.log('gets to inbound convo!');
+   var conversation = new Conversation({
+      mobile_number: mobile,
+      is_incoming: true
+   });
+
+   console.log("mobile: " + mobile);
+   console.log(mobile);
+
+
+   conversation.save(function (err) {
+      if (err) {
+         console.log(err);
+      } else {
+         console.log('gets to inbound convo!1');
+         var message = new Message({
+            message: text,
+            is_incoming: true,
+            conversation_id: conversation.id,
+         });
+
+         message.save(function (err) {
+            if (err) {
+               console.log(err);
+            } else {
+               console.log('gets to inbound convo!123');
+               io.emit('newIncomingConversation', { conversation: conversation, message: message });
+            }
+         });
+      }
+   });
+};
 
 var isAskingAboutHours = function (text) {
    if (text.indexOf("time") > -1 && 
@@ -143,10 +178,29 @@ var parseMessage = function (message, conversation_id, user_id, toNumber, io, tw
 };
 
 module.exports = {
+   getIncomingConversations: function (req, res) {
+      Conversation.find({ is_incoming: true }, 
+         function (err, convos) {
+            if (err) {
+               console.log(err);
+               res.send({ error: 'Error finding incoming conversations' });
+            }
+
+            res.send(convos);
+         });
+   },
+
    getMessages: function (req, res) {
+      console.log(req);
+      console.log(req.params);
+      console.log(req.params.conversation_id);
       console.log('conversation id is: ' + req.params.conversation_id);
-      Message.find({ conversation_id : req.params.conversation_id }, 
+      Message.find({ conversation_id : mongoose.Types.ObjectId(req.params.conversation_id) }, 
          function (err, messages) {
+            if (err) {
+               console.log(err);
+               res.send({ error: 'Error finding messages.' });
+            }
             console.log(messages);
             res.send(messages); 
          });
@@ -197,6 +251,7 @@ module.exports = {
             console.log(err);
             return;
          }
+         console.log(JSON.stringify(data));
 
          if (data) {
             var message = new Message({
@@ -213,7 +268,9 @@ module.exports = {
                   parseMessage(message, data.conversation_id, '', req.body.From, io, twilio);
                }
             });
-
+         } else {
+            console.log("couldn't find any party for this phone number");
+            createInboundConversation(mobile, text, io);
          }
       });
    }

@@ -9,6 +9,7 @@ var routes = function (app, io, twilio) {
    app.get('/conversation/:conversation_id/messages', Message.getMessages);
    app.get('/userId/:user_id/parties', function (req, res) {
       console.log('in routes at least'); Party.getParties(req, res);});
+   app.get('/userId/:user_id/conversations', Message.getIncomingConversations);
 //   app.get('/', function (req, res) { res.sendFile(__dirname + '/views/index.html'); });
 //   app.get('/waitlist', Party.getParties);
 
