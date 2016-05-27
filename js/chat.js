@@ -74,10 +74,10 @@ var Chat = (function () {
 
             c.statWaitingFor.find('.description').text(party.name + ' has been waiting for');
             if (diffHrs > 0) {
-                c.statWaitingFor.find('.amount').text(diffHrs + ':' + diffMins);
+                c.statWaitingFor.find('.amount').text(diffHrs + ':' + (diffMins > 9 ? diffMins : ('0' + diffMins)));
                 c.statWaitingFor.find('.type').text('');
             } else if (diffMins > 0) {
-                c.statWaitingFor.find('.amount').text(diffMins);
+                c.statWaitingFor.find('.amount').text((diffMins > 9 ? diffMins : ('0' + diffMins)));
                 c.statWaitingFor.find('.type').text('minutes');
             }
         }

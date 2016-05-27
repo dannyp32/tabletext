@@ -34,6 +34,29 @@ socket.on('incomingMessage', function (data) {
     }
 });
 
+socket.on('newIncomingConversation', function (data) {
+    if ($('.category.waitlist').hasClass('active')) {
+        return;
+    }
+    var conversation = data.conversation;
+    var message = data.message;
+    conversation.message = message.message;
+    conversation.name = conversation.mobile_number;
+    conversation.conversation_id = conversation._id;
+
+    Waitlist.addConversation(conversation);
+    //
+    //    $('#parties').prepend('<div class="party incoming-conversation"><div class="name">' + conversation.mobile_number + '</div><div class="preview truncate"></div><div class="arrival-time">' + _stringifyDate(new Date(conversation.created_at)) + '</div>');
+
+
+
+    $('.chat').trigger("chat:reload", conversation);
+
+    //    $('.conversation').append('<div class="message me"><div class="time">' + _stringifyDate(new Date(message.created_at)) + '</div><div class="text">' + message.text + '</div><div class="dot"></div></div>');
+
+    $(".conversation").scrollTop($(".conversation")[0].scrollHeight);
+});
+
 
 socket.on('newMessage', function (data) {
     var message = data.message;
