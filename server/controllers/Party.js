@@ -4,7 +4,6 @@ var Message = require('../models/Message');
 
 module.exports = {
    getMessages: function (req, res) {
-      console.log('conversation id is: ' + req.params.conversation_id);
       Message.find({ conversation_id : req.params.conversation_id }, 
          function (err, messages) {
             console.log(messages);
@@ -14,7 +13,6 @@ module.exports = {
 
 
    getParties: function (req, res) {
-      console.log('it gets here');
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -24,7 +22,6 @@ module.exports = {
                console.log(err);
                return;
             }
-            console.log(parties);
             res.send(parties); 
          });
    },
@@ -43,11 +40,6 @@ module.exports = {
       var notes = req.body.notes;
       var mobile_number = req.body.mobile; 
       var conversation = new Conversation();
-
-      console.log('notes is : ');
-
-      console.log(notes);
-
 
       conversation.save(function (err) {
          if (err) {

@@ -5,21 +5,15 @@ var Conversation = require('../models/Conversation');
 var mongoose = require('mongoose');
 
 var createInboundConversation = function (mobile, text, io) {
-   console.log('gets to inbound convo!');
    var conversation = new Conversation({
       mobile_number: mobile,
       is_incoming: true
    });
 
-   console.log("mobile: " + mobile);
-   console.log(mobile);
-
-
    conversation.save(function (err) {
       if (err) {
          console.log(err);
       } else {
-         console.log('gets to inbound convo!1');
          var message = new Message({
             message: text,
             is_incoming: true,
@@ -30,7 +24,6 @@ var createInboundConversation = function (mobile, text, io) {
             if (err) {
                console.log(err);
             } else {
-               console.log('gets to inbound convo!123');
                io.emit('newIncomingConversation', { conversation: conversation, message: message });
             }
          });
@@ -121,31 +114,19 @@ var parseMessage = function (message, conversation_id, user_id, toNumber, io, tw
             return;
          }
 
-         console.log("here are your settings");
-         console.log(settings);
-         console.log(JSON.stringify(settings));
-
          if (getHoursMessage) {
-            console.log('its trying to get the hours message');
             automatedResponse = settings[0].hours;
          } else if (getAddressMessage) {
-            console.log('its trying to get the address message');
             automatedResponse = settings[0].address;
          } else if (getMenuMessage) {
-            console.log('its trying to get the menu message');
             automatedResponse = settings[0].menu;
          } else if (getWebsiteMessage) {
-            console.log('its trying to get the website message');
             automatedResponse = settings[0].website;
          } else if (getTakeoutMessage) {
-            console.log('its trying to get the takeout message');
             automatedResponse = settings[0].takeout;
          } else {
             return;
          }
-
-
-         console.log(automatedResponse);
 
          var message = new Message({
             message: automatedResponse,
@@ -158,7 +139,6 @@ var parseMessage = function (message, conversation_id, user_id, toNumber, io, tw
                console.log(err);
             } else {
 
-               console.log(automatedResponse);
             twilio.sms.messages.create({
                body: automatedResponse,
                to: toNumber,
@@ -191,17 +171,12 @@ module.exports = {
    },
 
    getMessages: function (req, res) {
-      console.log(req);
-      console.log(req.params);
-      console.log(req.params.conversation_id);
-      console.log('conversation id is: ' + req.params.conversation_id);
       Message.find({ conversation_id : mongoose.Types.ObjectId(req.params.conversation_id) }, 
          function (err, messages) {
             if (err) {
                console.log(err);
                res.send({ error: 'Error finding messages.' });
             }
-            console.log(messages);
             res.send(messages); 
          });
    },

@@ -316,7 +316,7 @@ html,
 
 .chat > .conversation {
     width: 100%;
-    height: calc(80% - 70px);
+    height: calc(70% - 70px);
     overflow-y: scroll;
 }
 
@@ -388,6 +388,36 @@ html,
 
 .new-message {
     width: 100%;
-    height: calc(20% - 70px);
-    background: #fff;
+    height: calc(30% - 70px);
+    position: relative;
+}
+
+.message-text {
+    width: 80%;
+    height: 60%;
+    border: 1px solid #b1caed;
+    border-radius: 3px;
+    background: #dee8f2;
+    color: #5C769B;
+    margin: 15px 15px 15px 30px;
+    padding: 13px;
+    outline: none;
+    box-shadow: inset 0 1px 3px 1px rgba(53, 66, 78, 0.1);
+    position: relative;
+}
+
+.send-message {
+    background: transparent;
+    border-radius: 15px;
+    padding: 4px 16px 4px 16px;
+    outline: none;
+    border: 1px solid #539bf5;
+    color: #539bf5;
+    display: block;
+    margin-left: 30px;
+    cursor: pointer;
+}
+
+.send-message:active {
+    box-shadow: inset 1px 1px 2px 3px rgba(0, 0, 0, 0.1);
 }
